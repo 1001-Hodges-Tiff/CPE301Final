@@ -120,7 +120,8 @@ void adc_init(){
 }
 
 unsigned int adc_read(unsigned char adc_channel_num){
-  // clear the channel selection bits (MUX 4:0)
+  
+// clear the channel selection bits (MUX 4:0)
   *my_ADMUX  &= 0b11100000;
   // clear the channel selection bits (MUX 5)
   *my_ADCSRB &= 0b11110111;
