@@ -82,10 +82,9 @@ volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 void setup(){//initial setup 
 
 	Serial.begin(9600); //initialize serial
-	
-	myDDR_B |= (1 << PB5);//set as output pin
+
 	myDDR_B |= (3 << PB5);//set as output pin
-	myDDR_B |= (1 << PD5);//set as input pin
+	myDDR_B &= ~(1 << PB5);//set as input pin
 	myDDR_C |= (1 << PC5);//set as output pin
 	myDDR_D |= (7 << PD5);//set as output pin
 	myDDR_G |= (1 << PG5);//set as output pin
