@@ -8,11 +8,20 @@
 #include <LiquidCrystal.h>
 #include <DHT.h>
 
+//registers
+
+
 //definitions
 
 //global variables
 
-void setup(){}
+void setup(){//initial setup 
+
+	Serial.begin(9600);
+
+
+}
+
 void loop(){}
 void monitorWater(){}
 void currentState(){}
