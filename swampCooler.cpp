@@ -90,7 +90,18 @@ void setup(){//initial setup
 	myDDR_G |= (1 << PG5);//set as output pin
 	myDDR_H |= (4 << PH5);//set as output pin
 
+	//setting up the pins
 	
+	//setting up the clock
+	clock();
+	
+	//setting up the vent
+	controlVent();
+	
+	//setting up the adc
+	adc_init();
+	
+	//setting up the dht
 
 
 }
