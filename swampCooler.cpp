@@ -133,6 +133,8 @@ void loop(){}
 
 //function to check water level
 void monitorWater(){
+	
+	if(state)
 
 }
 
@@ -148,10 +150,6 @@ void timeAndDate(){
 		clock();
 	}
 	
-	
-	
-	
-
 }
 void controlVent(){
 	int steps = 2038;
@@ -236,6 +234,12 @@ void idle(){
 }
 void error(){
 	 state = 3;
+	
+	if(water != 50){
+		Serial.Print(Water is too low!!);
+		lcd.print(Water is too low!!);
+	}
+	
 	
 }
 void disable(){
