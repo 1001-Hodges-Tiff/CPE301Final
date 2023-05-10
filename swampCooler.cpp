@@ -71,9 +71,6 @@ volatile unsigned char *myPORT_L  = (unsigned char *) 0x10B;
 volatile unsigned char *myDDR_L  = (unsigned char *) 0x10A;
 volatile unsigned char *myPIN_L  = (unsigned char *) 0x109;
 
-//Interuppt 
-volatile unsigned char *myPCMSK1  = (unsigned char *) 0x6C;
-volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 
 
 //definitions
