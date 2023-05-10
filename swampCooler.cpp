@@ -99,6 +99,8 @@ float humid = 0;
 int ledstate = 0;
 int waterHeight = 0;
 int steps = 2038;
+int ventAngle = 0;
+
 
 int count = 0;
 int state = 1; //each of the four states correspond to a number
@@ -133,11 +135,17 @@ void setup(){//initial setup
 
 void loop(){
 	
+	//run the function to determine if the system is on or off
+	ISR();
+	
+	//reset the lcd screen so that new information can be displayed
 	lcd.clear();
 	lcd.write("Swamp Cooler");
 	
+	//run the stepper function for the vent control
 	stepper.step(steps);
 	delay(1000);
+	
 
 }
 
@@ -175,8 +183,13 @@ void timeAndDate(){
 	
 }
 void controlVent(){
+	int potValue = adc_read(A0);
+	ventAngle = map(potValue, 0, 200, 500, 1000);
+	delay(500); //add a delay to ensure this part functions smoother
 	
-	
+	//print the results to the user
+	Serial.print("Angle of the vent: ");
+	Serial.print(ventAngle);
 }
 void airAndHumidity(){
 	//can only check the temp and humidity level if the sensor is turned on
@@ -193,7 +206,15 @@ void airAndHumidity(){
 	return temp, humid;
 
 }
-void fanMotor(){}
+void fanMotor(){
+	if(temp < 20 || temp > 70){
+		pinFunctions(PORT_B, 21, OFF);//pin for fan so that it turns it off if it goes out of threshold
+	}
+	else{
+		pinFunctions(PORT_B, 21, ON);//allows the fan to be on because it meets the criteria
+	}
+
+}
 void clock(){
 	rtc.set(0, 42, 16, 6, 2, 5, 15);
 	rtc.refresh(); //update the clock
@@ -284,12 +305,22 @@ void disable(){
 	
 	//run the function to turn off lights so we can then turn on correct one
 	lightsOff();
+	
 	//turn on yellow led
 	lightsOn("yellow");
 	
 	//must turn motor offso we call fan function that deals with fan operations
 	fanMotor(OFF);
 	
+}
+
+ISR(INT4){//using an ISR function to handle disabling and enabling the system
+	if(INT4 == 1){
+		PORT_D |= (1 << 8);//set the pin HIGH so that the system starts
+	}
+	else{
+		PORT_D &= ~(1 << 8); //set the pin LOW so that the system shuts off
+	}
 }
 
 void adc_init(){
