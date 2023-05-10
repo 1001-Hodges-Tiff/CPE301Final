@@ -85,6 +85,9 @@ volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 #define IN2 11
 #define IN3 12
 #define IN4 13
+#define red 1
+#define blue 2
+#define green 3
 
 //global variables
 
@@ -92,6 +95,7 @@ float temp = 0;
 float water = 0;
 float humid = 0;
 int state = 0;
+int ledstate = 0;
 
 int count = 0;
 int state = 1; //each of the four states correspond to a number
@@ -131,7 +135,19 @@ void monitorWater(){
 
 }
 
-void timeAndDate(){}
+void timeAndDate(){
+	//must check the state of the program. can only print when the state is running
+	if(state == 1){
+		Serial.print();
+	
+	
+	}
+	
+	
+	
+	
+
+}
 void controlVent(){
 	int steos = 2038;
 	
@@ -140,10 +156,16 @@ void airAndHumidity(){}
 void monitorWater(){}
 void fanMotor(){}
 void clock(){}
-void lightsOn(){}
+void lightsOn(volatile unsigned char* port, unsigned char pin){
+	if(ledstate == 1){//on
+		*port |= 0x01 << pin; //shift pin 
+	}
+	else{//off
+		*port &= ~(0x01 << pin); //shift pin 
+	}
+
+}
 void lightsOff(){}
-void PIN_MODE(){}
-void WRITE_PIN(){}
 
 //functions for the states 
 void running(){
