@@ -153,7 +153,6 @@ void controlVent(){
 	
 }
 void airAndHumidity(){}
-void monitorWater(){}
 void fanMotor(){}
 void clock(){}
 void lightsOn(char ledColor){
@@ -212,7 +211,15 @@ void error(){
 	state = 3;
 }
 void disable(){
-	state = 4;
+	state = 0;
+	//run the function to turn off lights so we can then turn on correct one
+	
+	lightsOff();
+	//turn on yellow led
+	lightsOn("yellow");
+	
+	//must turn motor offso we call fan function that deals with fan operations
+	fanMotor(OFF);
 }
 
 void adc_init(){
