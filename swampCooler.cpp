@@ -89,7 +89,7 @@ volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 #define blue 2
 #define green 3
 #define yellow 4
-#define start 
+#define start true
 
 //global variables
 
@@ -98,13 +98,13 @@ float water = 0;
 float humid = 0;
 int ledstate = 0;
 int waterHeight = 0;
-
+int steps = 2038;
 
 int count = 0;
 int state = 1; //each of the four states correspond to a number
 
 LiquidCrystal lcd(d7, d6, d5, d4, e, r, rs, vo, vdd, vss);
-
+Stepper stepper(steps, 10, 11, 12, 13);
 
 void setup(){//initial setup 
 
@@ -128,12 +128,16 @@ void setup(){//initial setup
 	
 	//setting up the dht
 
-
+	stepper.setSpeed(25);
 }
 
 void loop(){
+	
 	lcd.clear();
-	lcd.write();
+	lcd.write("Swamp Cooler");
+	
+	stepper.step(steps);
+	delay(1000);
 
 }
 
@@ -155,11 +159,6 @@ void monitorWater(){
 	if(waterHeight < 50){
 		error();
 	}
-	
-	
-	
-	
-
 }
 
 void timeAndDate(){
@@ -176,7 +175,7 @@ void timeAndDate(){
 	
 }
 void controlVent(){
-	int steps = 2038;
+	
 	
 }
 void airAndHumidity(){
