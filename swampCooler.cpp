@@ -99,6 +99,7 @@ float humid = 0;
 int ledstate = 0;
 int waterHeight = 0;
 
+
 int count = 0;
 int state = 1; //each of the four states correspond to a number
 
@@ -139,7 +140,6 @@ void loop(){
 //function to check water level and its current attributes
 void monitorWater(){
 	
-	
 	//can only check the water level if the sensor is turned on
 	pinFunctions(PORT_B, A0, ON);
 	waterHeight = adc_read(); //read the value from the water sensor
@@ -179,7 +179,21 @@ void controlVent(){
 	int steps = 2038;
 	
 }
-void airAndHumidity(){}
+void airAndHumidity(){
+	//can only check the temp and humidity level if the sensor is turned on
+	pinFunctions(PORT_B, 6, ON);//pin for DHT11
+	temp = adc_read();//read the value from the sensor
+	humid = adc_read();//read the value from the sensor
+	
+	//this information must be displayed on the lcd screen
+	lcd.print("Temp and Humidity");
+	lcd.print(temp);
+	lcd.print("//");
+	lcd.print(humid);
+	
+	return temp, humid;
+
+}
 void fanMotor(){}
 void clock(){
 	rtc.set(0, 42, 16, 6, 2, 5, 15);
