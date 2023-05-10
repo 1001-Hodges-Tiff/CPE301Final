@@ -138,6 +138,8 @@ void loop(){
 
 //function to check water level and its current attributes
 void monitorWater(){
+	
+	
 	//can only check the water level if the sensor is turned on
 	pinFunctions(PORT_B, A0, ON);
 	waterHeight = adc_read(); //read the value from the water sensor
@@ -148,6 +150,13 @@ void monitorWater(){
 	Serial.print("Water Level: ");
 	Serial.print(waterHeight);
 	return waterHeight;
+	
+	//must check the state of the water because if it does not meet the threshold an alert pops up
+	if(waterHeight < 50){
+		error();
+	}
+	
+	
 	
 	
 
