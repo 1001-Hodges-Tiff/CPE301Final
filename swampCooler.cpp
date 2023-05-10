@@ -97,6 +97,7 @@ float temp = 0;
 float water = 0;
 float humid = 0;
 int ledstate = 0;
+int waterHeight = 0;
 
 int count = 0;
 int state = 1; //each of the four states correspond to a number
@@ -129,12 +130,26 @@ void setup(){//initial setup
 
 }
 
-void loop(){}
+void loop(){
+	lcd.clear();
+	lcd.write();
 
-//function to check water level
+}
+
+//function to check water level and its current attributes
 void monitorWater(){
+	//can only check the water level if the sensor is turned on
+	pinFunctions(PORT_B, A0, ON);
+	waterHeight = adc_read(); //read the value from the water sensor
+	//must turn the water sensor back off
+	pinFunctions(PORT_B, A0, ON);
 	
-	if(state)
+	//print the water levels to the user
+	Serial.print("Water Level: ");
+	Serial.print(waterHeight);
+	return waterHeight;
+	
+	
 
 }
 
@@ -181,22 +196,22 @@ void lightsOn(char ledColor){
 		case 'blue':
 			Serial.print("blue is on");
 			//need to turn the led on
-			lightPinFunctions(myPORT_B, 1, ON);
+			pinFunctions(myPORT_B, 1, ON);
 			break;
 		case 'red':
 			Serial.print("red is on");
 			//need to turn the led on
-			lightPinFunctions(myPORT_B, 2, ON);
+			pinFunctions(myPORT_B, 2, ON);
 			break;
 		case 'yellow':
 			Serial.print("yellow is on");
 			//need to turn the led on
-			lightPinFunctions(myPORT_B, 3, ON);
+			pinFunctions(myPORT_B, 3, ON);
 			break;
 		case 'green':	
 			Serial.print("green is on");
 			//need to turn the led on
-			lightPinFunctions(myPORT_B, 1, ON);
+			pinFunctions(myPORT_B, 1, ON);
 			break;
 			
 			
@@ -212,7 +227,7 @@ void lightsOff(volatile unsigned char* port, unsigned char pin){
 	}
 }
 
-void lightPinFunctions(volatile unsigned char* port, unsigned char pin, bool function){
+void pinFunctions(volatile unsigned char* port, unsigned char pin, bool function){
 	if(state == 1){//on
 		*port |= 0x01 << pin; //shift pin 
 	}
@@ -235,7 +250,7 @@ void idle(){
 void error(){
 	 state = 3;
 	
-	if(water != 50){
+	if(water != 50){//print an error message if the water is too low
 		Serial.Print(Water is too low!!);
 		lcd.print(Water is too low!!);
 	}
