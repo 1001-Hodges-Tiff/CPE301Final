@@ -93,6 +93,9 @@ float water = 0;
 float humid = 0;
 int state = 0;
 
+int count = 0;
+int state = 1; //each of the four states correspond to a number
+
 LiquidCrystal lcd(d7, d6, d5, d4, e, r, rs, vo, vdd, vss);
 
 
@@ -122,10 +125,17 @@ void setup(){//initial setup
 }
 
 void loop(){}
-void monitorWater(){}
+
+//function to check water level
+void monitorWater(){
+
+}
 
 void timeAndDate(){}
-void controlVent(){}
+void controlVent(){
+	int steos = 2038;
+	
+}
 void airAndHumidity(){}
 void monitorWater(){}
 void fanMotor(){}
@@ -136,14 +146,22 @@ void PIN_MODE(){}
 void WRITE_PIN(){}
 
 //functions for the states 
-void running(){}
-void idle(){}
-void error(){}
-void disable(){}
+void running(){
+	state = 1;
+}
+void idle(){
+	state = 2;
+}
+void error(){
+	state = 3;
+}
+void disable(){
+	state = 4;
+}
 
 void adc_init(){
 	//setup the A register
-  	*my_ADCSRA |= 0b10000000; // set bit   7 to 1 to enable the ADC
+  	*my_ADCSRA |= 0b10000000; // set bit 7 to 1 to enable the ADC
   	*my_ADCSRA &= 0b11011111; // clear bit 6 to 0 to disable the ADC trigger mode
   	*my_ADCSRA &= 0b11110111; // clear bit 5 to 0 to disable the ADC interrupt
   	*my_ADCSRA &= 0b11111000; // clear bit 0-2 to 0 to set prescaler selection to slow reading
