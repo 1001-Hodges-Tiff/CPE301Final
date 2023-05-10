@@ -89,6 +89,7 @@ volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 #define blue 2
 #define green 3
 #define yellow 4
+#define start 
 
 //global variables
 
@@ -136,11 +137,15 @@ void monitorWater(){
 }
 
 void timeAndDate(){
+	//call the clock function within to print the date and time
 	//must check the state of the program. can only print when the state is running
 	if(state == 1){
-		Serial.print();
-	
-	
+		Serial.print("On");
+		clock();
+	}
+	else{
+		Serial.print("Off");
+		clock();
 	}
 	
 	
@@ -149,12 +154,30 @@ void timeAndDate(){
 
 }
 void controlVent(){
-	int steos = 2038;
+	int steps = 2038;
 	
 }
 void airAndHumidity(){}
 void fanMotor(){}
-void clock(){}
+void clock(){
+	rtc.set(0, 42, 16, 6, 2, 5, 15);
+	rtc.refresh(); //update the clock
+	
+	Serial.print("Date: ");
+	Serial.print(rtc.month());
+	Serial.print("-");
+	Serial.print(rtc.day());
+	Serial.print("-");
+	Serial.print(rtc.year());
+	
+	Serial.print("Time: ");
+	Serial.print(rtc.hour());
+	Serial.print(":");
+	Serial.print(rtc.minute());
+	Serial.print(":");
+	Serial.print(rtc.second());
+}
+
 void lightsOn(char ledColor){
 	switch(ledColor){
 		case 'blue':
@@ -202,24 +225,30 @@ void lightPinFunctions(volatile unsigned char* port, unsigned char pin, bool fun
 
 //functions for the states 
 void running(){
-	state = 1;
+	 state = 1;
+	
 }
 void idle(){
-	state = 2;
+	 state = 2;
+	
+	
+	
 }
 void error(){
-	state = 3;
+	 state = 3;
+	
 }
 void disable(){
-	state = 0;
-	//run the function to turn off lights so we can then turn on correct one
+	 state = 0;
 	
+	//run the function to turn off lights so we can then turn on correct one
 	lightsOff();
 	//turn on yellow led
 	lightsOn("yellow");
 	
 	//must turn motor offso we call fan function that deals with fan operations
 	fanMotor(OFF);
+	
 }
 
 void adc_init(){
