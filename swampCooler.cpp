@@ -88,6 +88,14 @@ volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 
 //global variables
 
+float temp = 0;
+float water = 0;
+float humid = 0;
+int state = 0;
+
+LiquidCrystal lcd(d7, d6, d5, d4, e, r, rs, vo, vdd, vss);
+
+
 void setup(){//initial setup 
 
 	Serial.begin(9600); //initialize serial
