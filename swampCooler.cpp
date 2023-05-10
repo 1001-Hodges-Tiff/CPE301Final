@@ -209,6 +209,7 @@ void airAndHumidity(){//monitors the air temp and humidity and displays that on 
 void fanMotor(){//starts or stops the fan motor in terms of when a threshold is met or not met
 	if(temp < 20 || temp > 70){
 		pinFunctions(PORT_B, 21, OFF);//pin for fan so that it turns it off if it goes out of threshold
+		disable();
 	}
 	else{
 		pinFunctions(PORT_B, 21, ON);//allows the fan to be on because it meets the criteria
@@ -283,19 +284,63 @@ void pinFunctions(volatile unsigned char* port, unsigned char pin, bool function
 void running(){
 	 state = 1;
 	
+	//run the function to turn off lights so we can then turn on correct one
+	lightsOff();
+	
+	//turn on blue led
+	lightsOn("blue");
+	
+	//functions that must run based on the state
+	clock(); //runs the clock function for rtc
+	airAndHumidity();//monitors the temp and humidity levels
+	controlVent(); //monitors changes in the vent angle
+	fanMotor();//monitors changes in the fan state
+	
 }
 void idle(){
-	 state = 2;
+	state = 2;
 	
+	//run the function to turn off lights so we can then turn on correct one
+	lightsOff();
+	
+	//turn on green led
+	lightsOn("green");
+	
+	if(water != 50){//print an error message if the water is too low
+		error();
+	}
+	
+	if(temp < 20 || temp > 70){
+		idle(temp);
+	}
+	
+	clock(); //runs the clock function for rtc
+	airAndHumidity();//monitors the temp and humidity levels
+	controlVent(); //monitors changes in the vent angle
+	fanMotor(ON);//should be turned on
 	
 	
 }
 void error(){
-	 state = 3;
+	state = 3;
+	
+	//run the function to turn off lights so we can then turn on correct one
+	lightsOff();
+	
+	//turn on red led
+	lightsOn("red");
+	
+	clock(); //runs the clock function for rtc
+	airAndHumidity();//monitors the temp and humidity levels
+	controlVent(); //monitors changes in the vent angle
+	fanMotor(OFF);//monitor is set to OFF regardless
 	
 	if(water != 50){//print an error message if the water is too low
 		Serial.Print(Water is too low!!);
 		lcd.print(Water is too low!!);
+	}
+	else{
+		idle(waterHeight);
 	}
 	
 	
@@ -311,6 +356,10 @@ void disable(){
 	
 	//must turn motor offso we call fan function that deals with fan operations
 	fanMotor(OFF);
+	
+	controlVent(); //monitors changes in the vent angle
+	fanMotor();//monitors changes in the fan state
+	ISR(); //On and off state of system
 	
 }
 
