@@ -7,6 +7,7 @@
 #include <Stepper.h>
 #include <LiquidCrystal.h>
 #include <DHT.h>
+#include <RTClib.h>
 
 //registers
 
@@ -76,6 +77,14 @@ volatile unsigned char *myPCICR  = (unsigned char *) 0x68;
 
 
 //definitions
+#define temperature 20
+#define water 50
+#define ON true
+#define OFF false
+#define IN1 10
+#define IN2 11
+#define IN3 12
+#define IN4 13
 
 //global variables
 
@@ -89,8 +98,6 @@ void setup(){//initial setup
 	myDDR_D |= (7 << PD5);//set as output pin
 	myDDR_G |= (1 << PG5);//set as output pin
 	myDDR_H |= (4 << PH5);//set as output pin
-
-	//setting up the pins
 	
 	//setting up the clock
 	clock();
