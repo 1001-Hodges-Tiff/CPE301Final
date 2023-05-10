@@ -149,7 +149,7 @@ void loop(){
 
 }
 
-//function to check water level and its current attributes
+//function to check water level and its current attributes. prints error message when out of threshold
 void monitorWater(){
 	
 	//can only check the water level if the sensor is turned on
@@ -169,7 +169,7 @@ void monitorWater(){
 	}
 }
 
-void timeAndDate(){
+void timeAndDate(){//prints all of the coresponding time and date when the motor is on or off
 	//call the clock function within to print the date and time
 	//must check the state of the program. can only print when the state is running
 	if(state == 1){
@@ -182,7 +182,7 @@ void timeAndDate(){
 	}
 	
 }
-void controlVent(){
+void controlVent(){//allows the user to control the angle of the vent
 	int potValue = adc_read(A0);
 	ventAngle = map(potValue, 0, 200, 500, 1000);
 	delay(500); //add a delay to ensure this part functions smoother
@@ -191,7 +191,7 @@ void controlVent(){
 	Serial.print("Angle of the vent: ");
 	Serial.print(ventAngle);
 }
-void airAndHumidity(){
+void airAndHumidity(){//monitors the air temp and humidity and displays that on the lcd screen
 	//can only check the temp and humidity level if the sensor is turned on
 	pinFunctions(PORT_B, 6, ON);//pin for DHT11
 	temp = adc_read();//read the value from the sensor
@@ -206,7 +206,7 @@ void airAndHumidity(){
 	return temp, humid;
 
 }
-void fanMotor(){
+void fanMotor(){//starts or stops the fan motor in terms of when a threshold is met or not met
 	if(temp < 20 || temp > 70){
 		pinFunctions(PORT_B, 21, OFF);//pin for fan so that it turns it off if it goes out of threshold
 	}
@@ -215,7 +215,7 @@ void fanMotor(){
 	}
 
 }
-void clock(){
+void clock(){//basic clock function that records date and time
 	rtc.set(0, 42, 16, 6, 2, 5, 15);
 	rtc.refresh(); //update the clock
 	
@@ -234,7 +234,7 @@ void clock(){
 	Serial.print(rtc.second());
 }
 
-void lightsOn(char ledColor){
+void lightsOn(char ledColor){//determines what lights turn on 
 	switch(ledColor){
 		case 'blue':
 			Serial.print("blue is on");
@@ -261,7 +261,7 @@ void lightsOn(char ledColor){
 	}
 
 }
-void lightsOff(volatile unsigned char* port, unsigned char pin){
+void lightsOff(volatile unsigned char* port, unsigned char pin){//shuts off all of the lights
 	if(ledstate == 1){//on
 		*port |= 0x01 << pin; //shift pin 
 	}
@@ -270,7 +270,7 @@ void lightsOff(volatile unsigned char* port, unsigned char pin){
 	}
 }
 
-void pinFunctions(volatile unsigned char* port, unsigned char pin, bool function){
+void pinFunctions(volatile unsigned char* port, unsigned char pin, bool function){//basic functions for the pins that converts them to high or low states
 	if(state == 1){//on
 		*port |= 0x01 << pin; //shift pin 
 	}
